@@ -1,12 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
+const User = require("./user.model");
 
 const DailyLog = sequelize.define("DailyLog", {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
   date: {
     type: DataTypes.DATEONLY,
     allowNull: false,
@@ -37,10 +33,27 @@ const DailyLog = sequelize.define("DailyLog", {
   },
   exercise: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    allowNull: false,
   },
-}, {
-  timestamps: true,
+  focusLevel: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  energyLevel: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  stressLevel: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  notes: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
 });
+
+User.hasMany(DailyLog, { foreignKey: "userId" });
+DailyLog.belongsTo(User, { foreignKey: "userId" });
 
 module.exports = DailyLog;
