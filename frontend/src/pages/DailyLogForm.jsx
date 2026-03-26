@@ -56,42 +56,69 @@ const DailyLogForm = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // ✅ FIXED: handleChange was missing
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
+  // ✅ FIXED: clean single handleSubmit
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
-  setSuccess("");
+    e.preventDefault();
+    setError("");
+    setSuccess("");
 
-  try {
-    const { todo1, todo2, todo3, ...backendData } = formData;
+    try {
+      const { todo1, todo2, todo3, ...backendData } = formData;
 
-    await API.post("/logs", {
-      ...backendData,
-      sleepHours: parseFloat(formData.sleepHours),
-      studyHours: parseFloat(formData.studyHours),
-      mood: parseInt(formData.mood),
-      tasksPlanned: parseInt(formData.tasksPlanned),
-      tasksCompleted: parseInt(formData.tasksCompleted),
-      distractions: parseInt(formData.distractions),
-      focusLevel: parseInt(formData.focusLevel),
-      energyLevel: parseInt(formData.energyLevel),
-      stressLevel: parseInt(formData.stressLevel),
-    });
+      const payload = {
+        ...backendData,
+        sleepHours: formData.sleepHours ? parseFloat(formData.sleepHours) : 0,
+        studyHours: formData.studyHours ? parseFloat(formData.studyHours) : 0,
+        mood: formData.mood ? parseInt(formData.mood) : 0,
+        tasksPlanned: formData.tasksPlanned ? parseInt(formData.tasksPlanned) : 0,
+        tasksCompleted: formData.tasksCompleted ? parseInt(formData.tasksCompleted) : 0,
+        distractions: formData.distractions ? parseInt(formData.distractions) : 0,
+        focusLevel: formData.focusLevel ? parseInt(formData.focusLevel) : null,
+        energyLevel: formData.energyLevel ? parseInt(formData.energyLevel) : null,
+        stressLevel: formData.stressLevel ? parseInt(formData.stressLevel) : null,
+        exercise: !!formData.exercise,
+        notes: formData.notes || "",
+      };
 
-    setSuccess("Daily log saved beautifully ✨");
+      await API.post("/logs", payload);
 
-    setTimeout(() => navigate("/"), 1200);
-  } catch (err) {
-    setError(err.response?.data?.message || "Failed to save log");
-  }
-};
+      setSuccess("Daily log saved beautifully ✨");
+
+      setFormData({
+        date: "",
+        sleepHours: "",
+        studyHours: "",
+        mood: "",
+        tasksPlanned: "",
+        tasksCompleted: "",
+        distractions: "",
+        exercise: false,
+        focusLevel: "",
+        energyLevel: "",
+        stressLevel: "",
+        notes: "",
+        todo1: "",
+        todo2: "",
+        todo3: "",
+      });
+
+      setTimeout(() => navigate("/"), 1200);
+    } catch (err) {
+      console.error("Save log error:", err.response?.data || err.message);
+      setError(err.response?.data?.message || "Failed to save log");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F9F7F4] relative overflow-hidden flex">
       {/* Grid */}
