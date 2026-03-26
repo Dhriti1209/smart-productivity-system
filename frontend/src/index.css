@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* Global styles */
+body {
+  background-color: #F9F7F4;
+  color: #2F2F2F;
+  font-family: 'Inter', sans-serif;
+}
+
+* {
+  transition: all 0.2s ease-in-out;
+}
