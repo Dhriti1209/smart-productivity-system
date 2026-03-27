@@ -96,7 +96,7 @@ const Dashboard = () => {
       }} />
 
       <Sidebar />
-      {/* maxWidth: 1100 */}
+
       <main style={{ flex: 1, padding: "40px 48px", position: "relative", zIndex: 10, minWidth: 0 }}>
 
         {/* Header */}
