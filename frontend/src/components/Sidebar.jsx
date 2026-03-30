@@ -37,7 +37,10 @@ const Sidebar = () => {
           Daily Logs
         </button>
 
-        <button className="text-left px-4 py-3 rounded-2xl hover:bg-white/80 transition">
+        <button
+          onClick={() => navigate("/analytics")}
+          className={`text-left px-4 py-3 rounded-2xl transition ${isActive("/analytics")}`}
+        >
           Analytics
         </button>
 
