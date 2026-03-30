@@ -1,4 +1,9 @@
 const DailyLog = require("../models/dailyLog.model");
+const {
+  calculateProductivityScore,
+  calculateBurnoutRisk,
+  generateRecommendation,
+} = require("../utils/intelligence");
 
 // @desc Create a daily log
 // @route POST /api/logs
@@ -20,8 +25,45 @@ const createLog = async (req, res) => {
       notes,
     } = req.body;
 
+    const productivityScore = calculateProductivityScore({
+      sleepHours,
+      studyHours,
+      mood,
+      tasksPlanned,
+      tasksCompleted,
+      distractions,
+      exercise,
+      focusLevel,
+      energyLevel,
+      stressLevel,
+    });
+
+    const burnoutRisk = calculateBurnoutRisk({
+      sleepHours,
+      studyHours,
+      mood,
+      distractions,
+      exercise,
+      focusLevel,
+      energyLevel,
+      stressLevel,
+    });
+
+    const recommendation = generateRecommendation({
+      sleepHours,
+      studyHours,
+      mood,
+      tasksPlanned,
+      tasksCompleted,
+      distractions,
+      exercise,
+      focusLevel,
+      energyLevel,
+      stressLevel,
+    });
+
     const log = await DailyLog.create({
-      userId: req.user.id,
+      userId: 1,
       date,
       sleepHours,
       studyHours,
@@ -34,6 +76,9 @@ const createLog = async (req, res) => {
       energyLevel,
       stressLevel,
       notes,
+      productivityScore,
+      burnoutRisk,
+      recommendation,
     });
 
     res.status(201).json(log);

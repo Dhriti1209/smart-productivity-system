@@ -51,6 +51,20 @@ const DailyLog = sequelize.define("DailyLog", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+
+  // Intelligence fields
+  productivityScore: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  burnoutRisk: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  recommendation: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
 });
 
 User.hasMany(DailyLog, { foreignKey: "userId" });
